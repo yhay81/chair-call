@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /manage/
+
+Sitemap: https://chair-call.yusuke8h.workers.dev/sitemap.xml

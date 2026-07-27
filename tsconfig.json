@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "lib": ["ES2024", "DOM"],
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "types": ["@cloudflare/workers-types", "vite/client"]
+  },
+  "include": ["src", "test", "vite.config.ts", "vitest.config.ts"]
+}

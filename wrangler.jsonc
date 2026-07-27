@@ -1,0 +1,46 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "chair-call",
+  "main": "src/worker.tsx",
+  "compatibility_date": "2026-07-27",
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": {
+    "enabled": true,
+  },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/",
+      "/create",
+      "/calls/*",
+      "/manage/*",
+      "/guide",
+      "/privacy",
+      "/api/*",
+      "/healthz",
+    ],
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "chair-call",
+      "database_id": "0d70d0da-2a84-456b-84ff-9abe999c2503",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "ratelimits": [
+    {
+      "name": "WRITE_LIMITER",
+      "namespace_id": "27260717",
+      "simple": {
+        "limit": 20,
+        "period": 60,
+      },
+    },
+  ],
+  "triggers": {
+    "crons": ["47 4 * * *"],
+  },
+}

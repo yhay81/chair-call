@@ -1,0 +1,17 @@
+{
+  "name": "Chair Call",
+  "short_name": "Chair Call",
+  "description": "練習モデル募集を、条件と候補日時が見える一枚のカードに。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f1efe8",
+  "theme_color": "#283233",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
