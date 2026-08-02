@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /manage/
 
-Sitemap: https://chair-call.yusuke8h.workers.dev/sitemap.xml
+Sitemap: https://chair-call.yhay81.com/sitemap.xml

@@ -3,7 +3,7 @@ export const PRODUCT = {
   description: "練習モデル募集を、条件と候補日時が見える一枚のカードに。",
   listingLifetimeDays: 14,
   name: "Chair Call",
-  origin: "https://chair-call.yusuke8h.workers.dev",
+  origin: "https://chair-call.yhay81.com",
   repository: "https://github.com/yhay81/chair-call",
 } as const;
 

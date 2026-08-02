@@ -140,7 +140,7 @@ describe("Chair Call", () => {
 
     expect(health.status).toBe(200);
     expect(await health.json()).toMatchObject({ ok: true, service: "chair-call" });
-    expect(await sitemap.text()).toContain("https://chair-call.yusuke8h.workers.dev/create");
+    expect(await sitemap.text()).toContain("https://chair-call.yhay81.com/create");
   });
 
   it("returns a noindex branded 404", async () => {
