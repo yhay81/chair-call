@@ -37,10 +37,13 @@ function getClientId() {
   return id;
 }
 
+const qaMode = navigator.webdriver || new URLSearchParams(location.search).has("qa");
+
 function apiHeaders(extra = {}) {
   return {
     "Content-Type": "application/json",
     "X-Chair-Client": getClientId(),
+    "X-Chair-QA": qaMode ? "1" : "0",
     ...extra,
   };
 }

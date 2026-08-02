@@ -198,9 +198,9 @@ app.post("/api/listings", async (context) => {
 
   const userHash = await sha256(clientId);
   await context.env.DB.prepare(
-    "INSERT INTO events (user_hash, event_name) VALUES (?, 'listing_created')",
+    "INSERT INTO events (user_hash, event_name, is_qa) VALUES (?, 'listing_created', ?)",
   )
-    .bind(userHash)
+    .bind(userHash, context.req.header("X-Chair-QA") === "1" ? 1 : 0)
     .run();
 
   const requestOrigin = new URL(context.req.url).origin;
@@ -281,8 +281,8 @@ app.post("/api/events", async (context) => {
     return context.json({ error: "invalid_event" }, 400);
   }
   const userHash = await sha256(clientId);
-  await context.env.DB.prepare("INSERT INTO events (user_hash, event_name) VALUES (?, ?)")
-    .bind(userHash, event)
+  await context.env.DB.prepare("INSERT INTO events (user_hash, event_name, is_qa) VALUES (?, ?, ?)")
+    .bind(userHash, event, context.req.header("X-Chair-QA") === "1" ? 1 : 0)
     .run();
   return context.body(null, 202);
 });

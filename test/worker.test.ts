@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { validateListingInput, type ListingRow } from "../src/data/listing";
 import { app, type Bindings } from "../src/worker";
 
@@ -37,6 +37,7 @@ const listingRow: ListingRow = {
 type DatabaseOptions = {
   first?: (sql: string, values: unknown[]) => unknown;
   all?: (sql: string) => unknown[];
+  run?: (sql: string, values: unknown[]) => void;
 };
 
 function makeBindings(options: DatabaseOptions = {}, rateSuccess = true): Bindings {
@@ -47,7 +48,10 @@ function makeBindings(options: DatabaseOptions = {}, rateSuccess = true): Bindin
         values.push(...next);
         return {
           first: () => Promise.resolve(options.first?.(sql, values) ?? null),
-          run: () => Promise.resolve({ success: true }),
+          run: () => {
+            options.run?.(sql, values);
+            return Promise.resolve({ success: true });
+          },
         };
       },
       all: () => Promise.resolve({ results: options.all?.(sql) ?? [] }),
@@ -81,6 +85,15 @@ function jsonRequest(path: string, body: unknown, headers: Record<string, string
 }
 
 describe("Chair Call", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-07-27T00:00:00Z"));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("renders a visual Japanese recruitment board without experiment copy", async () => {
     const response = await app.request("/", undefined, makeBindings());
     const html = await response.text();
@@ -265,6 +278,22 @@ describe("Chair Call", () => {
     );
 
     expect(response.status).toBe(400);
+  });
+
+  it("marks automated verification separately from product use", async () => {
+    let values: unknown[] = [];
+    const bindings = makeBindings({
+      run: (sql, bound) => {
+        if (sql.includes("INSERT INTO events")) values = bound;
+      },
+    });
+    const response = await app.fetch(
+      jsonRequest("/api/events", { event: "visited" }, { "X-Chair-QA": "1" }),
+      bindings,
+    );
+
+    expect(response.status).toBe(202);
+    expect(values[2]).toBe(1);
   });
 
   it("enforces the write limiter before listing validation", async () => {
